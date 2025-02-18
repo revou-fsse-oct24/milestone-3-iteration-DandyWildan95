@@ -9,6 +9,10 @@ This README explains the purpose, key decisions, and processes represented in th
 
 ## **1. User Authentication Activity Diagram**
 
+<img width="258" alt="User Authentication" src="https://github.com/user-attachments/assets/7aaffec4-fc75-4170-a125-c9e9e1342030" />
+
+
+
 ### **Purpose**
 This diagram outlines the workflow for authenticating a user, including login, password verification, error handling, and token generation for successful logins.
 
@@ -43,6 +47,9 @@ This diagram outlines the workflow for authenticating a user, including login, p
 ---
 
 ## **2. Transaction Handling Activity Diagram**
+
+<img width="204" alt="Transaction Authentication" src="https://github.com/user-attachments/assets/62fa8e31-0496-4aed-8fd0-67f9faceff52" />
+
 
 ### **Purpose**
 This diagram visualizes the workflow for processing transactions, including balance verification, transaction completion, and history generation.
