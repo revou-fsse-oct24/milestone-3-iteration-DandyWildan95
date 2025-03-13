@@ -18,9 +18,25 @@ bcrypt = Bcrypt()
 def create_app():
     app = Flask(__name__)
     
-    Production-specific configurations
+    # Production-specific configurations
+    config_name = os.getenv('FLASK_ENV', 'development')
+    
+    # Database configuration
     if config_name == 'production':
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', '').replace('postgres://', 'postgresql://')
+        # Heroku PostgreSQL configuration
+        database_url = os.getenv('DATABASE_URL', '').replace('postgres://', 'postgresql://')
+        if not database_url:
+            raise ValueError("No DATABASE_URL set for production environment")
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    else:
+        # Default to local development database
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LOCAL_DATABASE_URL', 'sqlite:///development.db')
+    
+    # Common configurations
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'fallback-secret-key')
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
     
     # Initialize extensions
     db.init_app(app)
