@@ -1,8 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
@@ -14,6 +15,7 @@ load_dotenv()
 from .models.user import db
 ma = Marshmallow()
 bcrypt = Bcrypt()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -40,6 +42,7 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
+    migrate.init_app(app, db)
     ma.init_app(app)
     bcrypt.init_app(app)
     
@@ -65,20 +68,24 @@ def create_app():
         TransactionDetail
     )
     
-    # Register routes
-    api.add_resource(UserRegistration, '/auth/register')
-    api.add_resource(UserLogin, '/auth/login')
-    api.add_resource(UserRefresh, '/auth/refresh')
-    api.add_resource(UserProfile, '/users/me')
-    
+    # Add resources to API
+    api.add_resource(UserRegistration, '/register')
+    api.add_resource(UserLogin, '/login')
+    api.add_resource(UserProfile, '/profile')
+    api.add_resource(UserRefresh, '/refresh')
     api.add_resource(AccountList, '/accounts')
-    api.add_resource(AccountDetail, '/accounts/<int:account_id>')
-    
+    api.add_resource(AccountDetail, '/account/<int:account_id>')
     api.add_resource(TransactionList, '/transactions')
-    api.add_resource(TransactionDetail, '/transactions/<int:transaction_id>')
+    api.add_resource(TransactionDetail, '/transaction/<int:transaction_id>')
+    
+    # Root endpoint
+    @app.route('/')
+    def health_check():
+        return jsonify({"status": "healthy", "message": "RevoBank API is running"}), 200
     
     return app
 
+# This allows running the app directly for development
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
