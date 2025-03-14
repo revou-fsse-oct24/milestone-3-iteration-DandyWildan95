@@ -7,14 +7,20 @@ setup(
     include_package_data=True,
     install_requires=[
         'flask',
-        'flask-migrate',
-        'flask-sqlalchemy',
         'flask-restful',
+        'flask-sqlalchemy',
+        'flask-migrate',
         'flask-jwt-extended',
         'flask-bcrypt',
         'flask-marshmallow',
         'psycopg2-binary',
         'python-dotenv',
-        'marshmallow-sqlalchemy'
+        'marshmallow-sqlalchemy',
+        'blinker'
     ],
+    entry_points={
+        'console_scripts': [
+            'revobank=src.app:create_app',
+        ],
+    },
 )
