@@ -79,6 +79,18 @@ flask db upgrade
 - `GET /transactions/<id>`: Get transaction details
 - `POST /transactions`: Create new transaction
 
+## Heroku Deployment
+
+### Prerequisites
+- Heroku CLI installed
+- Heroku account
+- Docker installed
+
+### Deployment Steps
+1. Login to Heroku
+```bash
+heroku login
+
 ## Postman Documentation
 [Postman API Documentation](https://documenter.getpostman.com/view/your-postman-link)
 

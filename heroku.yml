@@ -1,0 +1,7 @@
+build:
+  config:
+    FLASK_ENV: production
+  docker:
+    web: Dockerfile
+run:
+  web: gunicorn src.app:create_app()
