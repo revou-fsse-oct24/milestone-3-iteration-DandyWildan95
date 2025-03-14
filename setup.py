@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 setup(
     name='revobank-api',
     version='0.1',
-    packages=find_packages(),
+    packages=find_packages(where='.'),
+    package_dir={'': '.'},
     include_package_data=True,
-    package_dir={'': '.'},  # This is important
     install_requires=[
         'flask',
         'flask-restful',
