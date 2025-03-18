@@ -1,34 +1,48 @@
-# Git
+# Version Control
 .git
 .gitignore
+.github
 
-# Python
+# Virtual Environments
+venv
+.venv
+env
+.env
+.env.example
+.env.production
+
+# Python Cache
 __pycache__
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
-.venv/
 
 # Logs
-logs/
 *.log
+logs/
 
-# Environment files
-.env
-.env.example
+# Development Files
+*.md
+README.md
+CHANGELOG.md
 
-# Development files
-.pytest_cache/
-.coverage
-htmlcov/
+# Testing
+test/
+*.test.py
+.pytest_cache
 
-# IDE files
-.vscode/
-.idea/
+# IDE Specific
+.vscode
+.idea
+*.swp
+*.swo
 
-# OS generated files
+# Build and Distribution
+*.egg-info
+dist/
+build/
+*.egg
+
+# Miscellaneous
 .DS_Store
 Thumbs.db
