@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "revobank-api"
+version = "0.1.0"
+description = "RevoBank API Project"
+readme = "README.md"
+requires-python = ">=3.9"
+
+# Change to a list format
+dependencies = [
+    "flask==2.3.2",
+    "flask-restful==0.3.9",
+    "flask-sqlalchemy==3.0.3",
+    "flask-migrate==4.0.4",
+    "mysqlclient==2.2.1",
+    "flask-jwt-extended==4.5.2",
+    "python-dotenv==1.0.0"
+]
