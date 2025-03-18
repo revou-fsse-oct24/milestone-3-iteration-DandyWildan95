@@ -150,8 +150,8 @@ This diagram outlines the workflow for authenticating a user, including login, p
   - If `No`, terminate the process.
 
 ### **Outcomes**
-- ✅ **Success**: User gains access (token generated).
-- ❌ **Failure**: Process terminates after retry attempts.
+- **Success**: User gains access (token generated).
+- **Failure**: Process terminates after retry attempts.
 
 ---
 
@@ -188,8 +188,8 @@ This diagram visualizes the workflow for processing transactions, including bala
   - If `No`, terminate the process.
 
 ### **Outcomes**
-- ✅ **Success**: Transaction completed and history updated.
-- ❌ **Failure**: Process terminates after retry attempts.
+- **Success**: Transaction completed and history updated.
+- **Failure**: Process terminates after retry attempts.
 
 ---
 
@@ -216,7 +216,8 @@ This diagram visualizes the workflow for processing transactions, including bala
 ## **Tools Used**
 - **draw.io**: For creating UML-compliant diagrams with swimlanes and decision nodes.
 - **Mermaid Syntax**: Optional text-based visualization (see [Mermaid Live Editor](https://mermaid.live)).
+- **Postman**: API Documentation and Testing (see [RevoBank API Docs](https://speeding-flare-28031.postman.co/workspace/My-Workspace~093f9620-066f-4483-8e19-81443a4b18ec/folder/43112813-6f6d170e-8a03-4bdc-bde4-108c105709d4?action=share&creator=43112813&ctx=documentation))
 
 ---
 
-For feedback or updates, open an issue or contact the maintainers.  
+For feedback or updates, open an issue or contact the maintainers.
