@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # RevoBank API
 
 ## Overview
@@ -110,9 +109,7 @@ Ensure the following environment variables are set in Render:
 - Verify all dependencies in `requirements.txt`
 - Check `Procfile` for correct start command
 - Ensure `wsgi.py` is correctly configured
-=======
 ## REVOBANK PROJECT
-=======
 # Activity Diagrams Documentation
 
 This README explains the purpose, key decisions, and processes represented in the **User Authentication** and **Transaction Handling** activity diagrams. These UML-compliant diagrams were created using draw.io to visualize workflows involving actors, decisions, and outcomes.
@@ -223,5 +220,3 @@ This diagram visualizes the workflow for processing transactions, including bala
 ---
 
 For feedback or updates, open an issue or contact the maintainers.  
->>>>>>> 0a797a6 (Initial commit)
->>>>>>> e85cba193e864b89fc47f0ce728ff1474623660e
