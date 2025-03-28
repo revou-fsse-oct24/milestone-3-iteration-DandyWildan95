@@ -4,46 +4,58 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from datetime import timedelta
 import os
-import secrets
+import logging
+from src.routes.budget import budget_bp
+from src.routes.transaction_category import transaction_category_bp
+from src.routes.bill import bill_bp
 
-# Import secret keys directly
-import secret_key
-import jwt_secret_key
-
+# Initialize extensions
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
+api = Api()
+cors = CORS()
 
-def create_app():
+def create_app(test_config=None):
+    # Create and configure the app
     app = Flask(__name__)
     
-    # Update database URI configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-        'DATABASE_URL', 
-        'mysql://revobank_user:Bangsat1@localhost/revobank'
+    # Default configuration
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get('SECRET_KEY', 'dev_fallback_secret'),
+        JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY', 'dev_fallback_jwt_secret'),
+        SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'mysql://revobank_user:Bangsat1@localhost/revobank'),
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        FLASK_ENV=os.environ.get('FLASK_ENV', 'development')
     )
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    # Use environment variables or generated keys
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secret_key.SECRET_KEY)
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', jwt_secret_key.JWT_SECRET_KEY)
-    
-    # JWT Configuration
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
-    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 
-    # Enable CORS
-    CORS(app)
+    # Override with test config if provided
+    if test_config is not None:
+        app.config.from_mapping(test_config)
+
+    # Logging configuration
+    logging.basicConfig(
+        level=logging.INFO if app.config['FLASK_ENV'] == 'production' else logging.DEBUG,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
 
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    cors.init_app(app)
+    
+    # Create API instance
+    api.init_app(app)
 
-    # Create API
-    api = Api(app)
+    # Ensure database is created
+    with app.app_context():
+        try:
+            db.create_all()
+            logging.info("Database tables created successfully")
+        except Exception as e:
+            logging.error(f"Error creating database tables: {e}")
 
     # Import and register resources
     from src.resources.user_resources import register_user_resources
@@ -59,9 +71,26 @@ def create_app():
     register_transaction_resources(api)
     register_additional_resources(api)
 
+    # Register blueprints
+    app.register_blueprint(budget_bp, url_prefix='/api')
+    app.register_blueprint(transaction_category_bp, url_prefix='/api')
+    app.register_blueprint(bill_bp, url_prefix='/api')
+
     # Health check route
     @app.route('/')
     def health_check():
         return 'RevoBank API is running!', 200
+
+    # Error handlers
+    @app.errorhandler(404)
+    def not_found_error(error):
+        logging.error(f"404 error: {error}")
+        return {'message': 'Resource not found'}, 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        logging.error(f"500 error: {error}")
+        db.session.rollback()
+        return {'message': 'Internal server error'}, 500
 
     return app

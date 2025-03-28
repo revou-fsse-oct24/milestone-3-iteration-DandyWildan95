@@ -2,18 +2,17 @@ version: '3.8'
 
 services:
   web:
-    build: 
-      context: .
-      dockerfile: dockerfile
+    build: .
     ports:
       - "5000:5000"
-    environment:
-      - FLASK_ENV=development
-      - DATABASE_URL=postgresql://username:password@db/revobank
-    depends_on:
-      - db
     volumes:
       - .:/app
+    environment:
+      - FLASK_APP=src/app.py
+      - FLASK_ENV=development
+      - DATABASE_URL=sqlite:///instance/revobank.db
+      - JWT_SECRET_KEY=your-secret-key-here
+    command: flask run --host=0.0.0.0
 
   db:
     image: postgres:13

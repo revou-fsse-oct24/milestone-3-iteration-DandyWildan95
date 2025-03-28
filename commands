@@ -1,0 +1,5 @@
+mkdir -p src/resources
+touch src/resources/__init__.py
+touch src/resources/account_resources.py
+touch src/resources/user_resources.py
+touch src/resources/transaction_resources.py 
