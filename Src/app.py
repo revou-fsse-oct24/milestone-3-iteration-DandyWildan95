@@ -4,11 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_login import LoginManager
 import os
 import logging
 from src.routes.budget import budget_bp
 from src.routes.transaction_category import transaction_category_bp
 from src.routes.bill import bill_bp
+from src.routes.auth import auth_bp
+from src.models.user import User
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -16,6 +19,7 @@ migrate = Migrate()
 jwt = JWTManager()
 api = Api()
 cors = CORS()
+login_manager = LoginManager()
 
 def create_app(test_config=None):
     # Create and configure the app
@@ -71,10 +75,19 @@ def create_app(test_config=None):
     register_transaction_resources(api)
     register_additional_resources(api)
 
+    # Initialize Login Manager
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     # Register blueprints
-    app.register_blueprint(budget_bp, url_prefix='/api')
-    app.register_blueprint(transaction_category_bp, url_prefix='/api')
-    app.register_blueprint(bill_bp, url_prefix='/api')
+    app.register_blueprint(budget_bp)
+    app.register_blueprint(transaction_category_bp)
+    app.register_blueprint(bill_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
 
     # Health check route
     @app.route('/')
